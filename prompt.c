@@ -6,13 +6,11 @@
 
 void display_prompt() {
   static int first_time_prompt = 1;
+  char *msg = "Simple Shell: ";
 
   if (first_time_prompt) {
-    /* NOTE: This keeps looping for what ever reason */
-    const char *ansi_clear_screen = " [1;1H [2J\n";
-    /* TODO: Change the ansi_clear_screen as its value not allowed in sdt=89 */
-    write(STDOUT_FILENO, ansi_clear_screen, 12);
+    system("clear");
     first_time_prompt = 0;
   }
-  putchar('#');
+  write(STDIN_FILENO, msg, strlen(msg));
 }
