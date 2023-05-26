@@ -13,7 +13,7 @@ int printEnv(info_t *info)
 
 /**
  * _getenv - gets the value of @name variable
- * @info: Structure containing potential arguments. Used to maintain
+ * @info: Structure containing potential arguments.
  * @name: env var name
  *
  * Return: the value

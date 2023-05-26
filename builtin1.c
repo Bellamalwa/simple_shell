@@ -82,7 +82,7 @@ int print_alias(list_t *node)
 }
 
 /**
- * aliasFunc - mimics the alias builtin (man alias)
+ * aliasFunc - mimics the alias builtin
  * @info: Structure containing potential arguments.
  *  Return: Always 0
  */

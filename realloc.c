@@ -33,11 +33,11 @@ void freeStrings(char **pointer_string)
 
 /**
  * _realloc - reallocates a block of memory
- * @ptr: pointer to previous malloc'ated block
+ * @ptr: pointer to previously allocated block
  * @old_size: byte size of previous block
  * @new_size: byte size of new block
  *
- * Return: pointer to da ol'block nameen.
+ * Return: pointer to newly allocated memory block.
  */
 void *_realloc(void *ptr, unsigned int old_size, unsigned int new_size)
 {

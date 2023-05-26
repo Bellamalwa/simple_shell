@@ -30,7 +30,7 @@ int exitShell(info_t *info)
 
 /**
  * cdFunc - changes the current directory of the process
- * @info: Structure containing potential arguments. Used to maintain
+ * @info: Structure containing potential arguments.
  * constant function prototype.
  * Return: Always 0
  */
@@ -78,8 +78,7 @@ int cdFunc(info_t *info)
 
 /**
  * helpFunc - Print the help menu with available functions
- * @info: Structure containing potential arguments. Used to maintain
- * constant function prototype.
+ * @info: Structure containing potential arguments.
  * Return: Always 0
  */
 int helpFunc(info_t *info)
@@ -87,9 +86,9 @@ int helpFunc(info_t *info)
 	char **arg_array;
 
 	arg_array = info->argv;
-	_puts("help call works. Function not yet implemented \n");
+	_puts("Function not yet implemented... \n");
 	if (0)
-		_puts(*arg_array); /* temp att_unused workaround */
+		_puts(*arg_array); /* NOTE: att_unused workaround */
 	return (0);
 }
 
