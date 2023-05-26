@@ -1,4 +1,4 @@
-#include "shell.h"
+#include "main.h"
 
 /**
  * add_node - adds a node to the start of the list
@@ -75,7 +75,7 @@ list_t *add_node_end(list_t **head, const char *str, int num)
 }
 
 /**
- * print_list_str - prints only the str element of a list_t linked list
+ * print_list_str - only print str element of list_t linked list
  * @h: pointer to first node
  *
  * Return: size of list

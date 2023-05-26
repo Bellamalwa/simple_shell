@@ -1,13 +1,13 @@
-#include "shell.h"
+#include "main.h"
 
 /**
- * hsh - main shell loop
+ * loopTrigger - main shell control loop
  * @info: the parameter & return info struct
  * @av: the argument vector from main()
  *
  * Return: 0 on success, 1 on error, or error code
  */
-int hsh(info_t *info, char **av)
+int loopTrigger(info_t *info, char **av)
 {
 	ssize_t r = 0;
 	int builtin_ret = 0;
@@ -16,8 +16,9 @@ int hsh(info_t *info, char **av)
 	{
 		clear_info(info);
 		if (interactive(info))
-			_puts("$ ");
-		_eputchar(BUF_FLUSH);
+		/* TODO: add platform name? */
+			_puts("simple_shell: ");
+		printStringError(BUF_FLUSH);
 		r = get_input(info);
 		if (r != -1)
 		{
@@ -44,41 +45,41 @@ int hsh(info_t *info, char **av)
 }
 
 /**
- * find_builtin - finds a builtin command
+ * find_builtin - find a builtin command from the list
  * @info: the parameter & return info struct
  *
  * Return: -1 if builtin not found,
- * 	0 if builtin executed successfully,
- * 	1 if builtin found but not successful,
- * 	2 if builtin signals exit()
+ * 0 if builtin executed successfully,
+ * 1 if builtin found but not successful,
+ * 2 if builtin signals exit()
  */
 int find_builtin(info_t *info)
 {
-	int i, built_in_ret = -1;
-	builtin_table builtintbl[] = {
-		{"exit", _myexit},
-		{"env", _myenv},
-		{"help", _myhelp},
-		{"history", _myhistory},
-		{"setenv", _mysetenv},
-		{"unsetenv", _myunsetenv},
-		{"cd", _mycd},
-		{"alias", _myalias},
+	int i, builtin_return = -1;
+	builtin_table builtinlist[] = {
+		{"exit", exitShell},
+		{"env", printEnv},
+		{"help", helpFunc},
+		{"history", printHistory},
+		{"setenv", setENV},
+		{"unsetenv", unsetENV},
+		{"cd", cdFunc},
+		{"alias", aliasFunc},
 		{NULL, NULL}
 	};
 
-	for (i = 0; builtintbl[i].type; i++)
-		if (_strcmp(info->argv[0], builtintbl[i].type) == 0)
+	for (i = 0; builtinlist[i].type; i++)
+		if (_strcmp(info->argv[0], builtinlist[i].type) == 0)
 		{
 			info->line_count++;
-			built_in_ret = builtintbl[i].func(info);
+			builtin_return = builtinlist[i].func(info);
 			break;
 		}
-	return (built_in_ret);
+	return (builtin_return);
 }
 
 /**
- * find_cmd - finds a command in PATH
+ * find_cmd - find given command from PATH
  * @info: the parameter & return info struct
  *
  * Return: void
@@ -86,7 +87,7 @@ int find_builtin(info_t *info)
 void find_cmd(info_t *info)
 {
 	char *path = NULL;
-	int i, k;
+	int pos, count;
 
 	info->path = info->argv[0];
 	if (info->linecount_flag == 1)
@@ -94,10 +95,10 @@ void find_cmd(info_t *info)
 		info->line_count++;
 		info->linecount_flag = 0;
 	}
-	for (i = 0, k = 0; info->arg[i]; i++)
-		if (!is_delim(info->arg[i], " \t\n"))
-			k++;
-	if (!k)
+	for (pos = 0, count = 0; info->arg[pos]; pos++)
+		if (!is_delim(info->arg[pos], " \t\n"))
+			count++;
+	if (!count)
 		return;
 
 	path = find_path(info, _getenv(info, "PATH="), info->argv[0]);
@@ -109,7 +110,7 @@ void find_cmd(info_t *info)
 	else
 	{
 		if ((interactive(info) || _getenv(info, "PATH=")
-					|| info->argv[0][0] == '/') && is_cmd(info, info->argv[0]))
+					|| info->argv[0][0] == '/') && is_executable(info, info->argv[0]))
 			fork_cmd(info);
 		else if (*(info->arg) != '\n')
 		{
@@ -120,7 +121,7 @@ void find_cmd(info_t *info)
 }
 
 /**
- * fork_cmd - forks a an exec thread to run cmd
+ * fork_cmd - fork an exec cmd to run on separate thread
  * @info: the parameter & return info struct
  *
  * Return: void
@@ -132,7 +133,6 @@ void fork_cmd(info_t *info)
 	child_pid = fork();
 	if (child_pid == -1)
 	{
-		/* TODO: PUT ERROR FUNCTION */
 		perror("Error:");
 		return;
 	}
@@ -145,7 +145,7 @@ void fork_cmd(info_t *info)
 				exit(126);
 			exit(1);
 		}
-		/* TODO: PUT ERROR FUNCTION */
+		perror("Error:");
 	}
 	else
 	{

@@ -1,7 +1,7 @@
-#include "shell.h"
+#include "main.h"
 
 /**
- * _memset - fills memory with a constant byte
+ * _memset - fills memory with @b
  * @s: the pointer to the memory area
  * @b: the byte to fill *s with
  * @n: the amount of bytes to be filled
@@ -17,18 +17,18 @@ char *_memset(char *s, char b, unsigned int n)
 }
 
 /**
- * ffree - frees a string of strings
- * @pp: string of strings
+ * freeStrings - frees up strings within the linked list
+ * @pointer_string: string of strings
  */
-void ffree(char **pp)
+void freeStrings(char **pointer_string)
 {
-	char **a = pp;
+	char **string = pointer_string;
 
-	if (!pp)
+	if (!pointer_string)
 		return;
-	while (*pp)
-		free(*pp++);
-	free(a);
+	while (*pointer_string)
+		free(*pointer_string++);
+	free(string);
 }
 
 /**

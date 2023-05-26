@@ -1,18 +1,19 @@
-#include "shell.h"
+#include "main.h"
 
 /**
- * _erratoi - converts a string to an integer
+ * printAtoiError - converts a string to an integer
  * @s: the string to be converted
- * Return: 0 if no numbers in string, converted number otherwise
- *       -1 on error
+ * Return: 0 if no numbers in string
+ * convert number otherwise
+ * -1 on error/failure
  */
-int _erratoi(char *s)
+int printAtoiError(char *s)
 {
 	int i = 0;
 	unsigned long int result = 0;
 
 	if (*s == '+')
-		s++;  /* TODO: why does this make main return 255? */
+		s++;  /* BUG: can make main return 255 */
 	for (i = 0;  s[i] != '\0'; i++)
 	{
 		if (s[i] >= '0' && s[i] <= '9')
@@ -29,38 +30,39 @@ int _erratoi(char *s)
 }
 
 /**
- * print_error - prints an error message
+ * print_error - prints error message
  * @info: the parameter & return info struct
  * @estr: string containing specified error type
- * Return: 0 if no numbers in string, converted number otherwise
- *        -1 on error
+ * Return: 0 if no numbers in string
+ * convert number otherwise
+ * -1 on error/failure
  */
 void print_error(info_t *info, char *estr)
 {
-	_eputs(info->fname);
-	_eputs(": ");
-	print_d(info->line_count, STDERR_FILENO);
-	_eputs(": ");
-	_eputs(info->argv[0]);
-	_eputs(": ");
-	_eputs(estr);
+	printCharError(info->fname);
+	printCharError(": ");
+	printDecimal(info->line_count, STDERR_FILENO);
+	printCharError(": ");
+	printCharError(info->argv[0]);
+	printCharError(": ");
+	printCharError(estr);
 }
 
 /**
- * print_d - function prints a decimal (integer) number (base 10)
+ * printDecimal - function prints a decimal (integer) number (base 10)
  * @input: the input
  * @fd: the filedescriptor to write to
  *
  * Return: number of characters printed
  */
-int print_d(int input, int fd)
+int printDecimal(int input, int fd)
 {
 	int (*__putchar)(char) = _putchar;
 	int i, count = 0;
 	unsigned int _abs_, current;
 
 	if (fd == STDERR_FILENO)
-		__putchar = _eputchar;
+		__putchar = printStringError;
 	if (input < 0)
 	{
 		_abs_ = -input;
