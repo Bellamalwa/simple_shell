@@ -1,4 +1,4 @@
-#include "main.h"
+#include "shell.h"
 
 /**
  * **strtoken - splits @str into words. Repeat @d(delimters) are ignored

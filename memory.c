@@ -1,4 +1,4 @@
-#include "main.h"
+#include "shell.h"
 
 /**
  * freePointer - frees @ptr & NULLs the address
